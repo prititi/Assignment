@@ -69,19 +69,15 @@ userRouter.post("/login", async (req, res) => {
             if (result) {
                 const token = jwt.sign({ userID: user[0]._id }, process.env.secret,{ expiresIn: "7d"});
                 const reftoken = jwt.sign({ userID: user[0]._id }, process.env.refsecret,{ expiresIn: "30d"});
-                // client.HSET("tokensObj", email, token)
-                // await client.HSET("tokensObj", token,"exist","EX",6)
-                // await client.expire("tokensObj",60)
-
                 res.cookie("token",token)
                 res.cookie("reftoken",reftoken)
                 res.send({ "message": "Login Successful", "Token": token,"reftoken":reftoken, "User": user[0] })
             } else {
-                res.status(400).json({err:"Wrong credentials"})
+                res.status(400).json({err:"Invailed credentials"})
             }
         });
     } else {
-        res.status(400).json({err:"Wrong credentials"})
+        res.status(400).json({err:"Invailed credentials"})
     }
 })
 
@@ -92,12 +88,11 @@ userRouter.get("/logout", async (req, res) => {
     try {
         let token=req.headers.authorization
         // console.log(token);
-        // await client.HDEL("tokensObj", token)
         let block=new BlockModel({token})
         await block.save()
         res.send({ "mess": "Logout Successful" })
     } catch (error) {
-        res.send({ "Error": error.message })
+        res.send({ "Error": error.message})
     }
 })
 

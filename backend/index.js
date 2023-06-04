@@ -1,8 +1,9 @@
 const express=require('express');
-const cors=require('cors');
+// const cors=require('cors');
 const { connection } = require("./config/db");
 const {userRouter} = require("./Routes/userrouter")
 const {authenticator}  = require("./Middleware/authenticator")
+const cors= require('cors');
 require('dotenv').config();
 const app=express();
 const cookieParser = require('cookie-parser')
@@ -17,10 +18,6 @@ app.use('/user',userRouter);
 
 
 app.use(authenticator)
-
-
-
-
 
 
 app.listen(process.env.port,async()=>{
